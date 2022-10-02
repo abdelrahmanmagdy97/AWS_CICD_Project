@@ -126,6 +126,7 @@ workflows:
           requires:
             - build-backend
       - notify_success:
+          context: slack-secrets
           requires:
             - test-frontend
             - test-backend
