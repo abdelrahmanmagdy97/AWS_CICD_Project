@@ -1,7 +1,6 @@
 version: 2.1
 orbs:
-  node: 'circleci/node@4.1'
-  slack: circleci/slack@4.1
+  slack: circleci/slack@4.9.3
          
 commands:
   notify_on_failure:
@@ -10,7 +9,10 @@ commands:
           event: fail
           channel: testing
           template: basic_fail_1
-    context: slack-secrets
+      - slack/notify:
+          event: pass
+          channel: testing
+          template: success_tagged_deployment_1
 
 jobs:
   build-frontend:
