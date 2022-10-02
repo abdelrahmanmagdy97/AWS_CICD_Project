@@ -11,7 +11,6 @@ commands:
           channel: testing
           template: success_tagged_deployment_1
 jobs:
-
   build-frontend:
     docker:
       - image: circleci/node:13.8.0
