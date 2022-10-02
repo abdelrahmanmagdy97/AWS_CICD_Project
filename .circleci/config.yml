@@ -104,6 +104,15 @@ jobs:
             npm install
             npm audit fix --audit-level=critical
       - notify_on_failure
+  
+  notify_success:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - slack/notify:
+          event: pass
+          channel: cicd-pipeline
+          template: success_tagged_deployment_1
 
 
 workflows:
@@ -123,3 +132,9 @@ workflows:
       - scan-backend:
           requires:
             - build-backend
+      - notify_success:
+          requires:
+            - test-frontend
+            - test-backend
+            - scan-backend
+            - scan-frontend
