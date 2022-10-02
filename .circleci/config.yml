@@ -3,27 +3,13 @@ orbs:
   slack: circleci/slack@4.1
 
 commands:
-  notify_success:
+  notify_on_failure:
     steps:
       - slack/notify:
-          event: pass
-          channel: testing
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "plain_text",
-                      "text": "*Success*",
-                      "emoji": true
-                    }
-                  ]
-                }
-              ]
-            }
-          context: Abdelrahman      
+          event: fail
+          channel: cicd-pipeline
+          template: basic_fail_1
+    context: Abdelrahman
     
 jobs:
 
@@ -44,7 +30,7 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
-      - notify_success
+      - notify_on_failure
   build-backend:
     docker:
       - image: circleci/node:13.8.0
