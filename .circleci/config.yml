@@ -106,7 +106,21 @@ jobs:
       - slack/notify:
           event: pass
           channel: testing
-          template: success_tagged_deployment_1
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*This is a text notification*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
 
 workflows:
   default:
