@@ -23,7 +23,7 @@ commands:
                 }
               ]
             }    
-    context: Abdelrahman
+    
 jobs:
 
   
@@ -43,8 +43,8 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
-      - notify_success
-
+      - notify_success:
+          context: Abdelrahman
   build-backend:
     docker:
       - image: circleci/node:13.8.0
