@@ -1,21 +1,29 @@
-version: '2.1'
+version: 2.1
 orbs:
-  node: 'circleci/node:4.1'
   slack: circleci/slack@4.1
          
 jobs:
-  deploy:
-      executor:
-        name: node/default
-      steps:
-        - checkout
-        - node/install-packages
-        - run:
-            command: npm run deploy
-        - slack/notify:
-            channel: testing
-            event: fail
-            template: basic_fail_1
+  notify:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - slack/notify:
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*This is a text notification*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
+          event: always
 
   build-frontend:
     docker:
@@ -124,7 +132,7 @@ workflows:
       - scan-backend:
           requires:
             - build-backend
-  deploy_and_notify:
+  send-notification:
     jobs:
-      - deploy:
+      - notify:
           context: slack-secrets
