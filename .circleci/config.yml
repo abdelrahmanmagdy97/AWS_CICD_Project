@@ -13,7 +13,7 @@ jobs:
       - run:
           command: npm run deploy
       - slack/notify:
-          channel: ABCXYZ
+          channel: testing
           event: fail
           template: basic_fail_1
 
@@ -124,7 +124,7 @@ workflows:
       - scan-backend:
           requires:
             - build-backend
-  send-notification:
-    jobs:
-      - notify:
-          context: slack-secrets
+  deploy_and_notify:
+      jobs:
+        - deploy:
+            context: slack-secrets
