@@ -1,20 +1,13 @@
 version: 2.1
 orbs:
-  node: circleci/node@4.1
-  slack: circleci/slack@4.1
-         
-jobs:
-  deploy:
-    executor:
-      name: node/default
+  slack: circleci/slack@4.9.3
+
+commands:
+  notify_on_failure:
     steps:
-      - checkout
-      - node/install-packages
-      - run:
-          command: npm run deploy
       - slack/notify:
-          channel: testing
           event: fail
+          channel: testing
           template: basic_fail_1
 
   build-frontend:
@@ -33,6 +26,7 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
+      - notify_on_failure
 
   build-backend:
     docker:
@@ -50,6 +44,7 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
+      - notify_on_failure
 
   test-frontend:
     docker:
@@ -63,7 +58,8 @@ jobs:
           command: |
             cd frontend
             npm install
-            npm run test                
+            npm run test     
+      - notify_on_failure           
   test-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -77,6 +73,7 @@ jobs:
             cd backend
             npm install
             npm run test 
+      - notify_on_failure
 
   scan-frontend:
     docker:
@@ -91,6 +88,7 @@ jobs:
             cd frontend
             npm install
             npm audit fix --audit-level=critical
+      - notify_on_failure
 
   scan-backend:
     docker:
@@ -105,6 +103,7 @@ jobs:
             cd backend
             npm install
             npm audit fix --audit-level=critical
+      - notify_on_failure
 
 
 workflows:
