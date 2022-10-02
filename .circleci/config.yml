@@ -1,7 +1,29 @@
 version: 2.1
 orbs:
   slack: circleci/slack@4.1
-         
+
+commands:
+  notify_success:
+    steps:
+      - slack/notify:
+          event: pass
+          channel: testing
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*Success*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }    
+    context: Abdelrahman
 jobs:
 
   
@@ -21,7 +43,7 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
-
+      - notify_success
 
   build-backend:
     docker:
@@ -97,30 +119,7 @@ jobs:
             cd backend
             npm install
             npm audit fix --audit-level=critical
- 
-  
-  notify_success:
-    docker:
-      - image: cimg/base:stable
-    steps:
-      - slack/notify:
-          event: pass
-          channel: testing
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "plain_text",
-                      "text": "*This is a text notification*",
-                      "emoji": true
-                    }
-                  ]
-                }
-              ]
-            }
+
 
 workflows:
   default:
@@ -139,10 +138,4 @@ workflows:
       - scan-backend:
           requires:
             - build-backend
-      - notify_success:
-          context: Abdelrahman
-          requires:
-            - test-frontend
-            - test-backend
-            - scan-backend
-            - scan-frontend
+          
