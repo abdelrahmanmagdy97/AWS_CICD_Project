@@ -105,7 +105,7 @@ jobs:
     steps:
       - slack/notify:
           event: pass
-          channel: cicd-pipeline
+          channel: testing
           template: success_tagged_deployment_1
 
 workflows:
@@ -131,4 +131,3 @@ workflows:
             - test-backend
             - scan-backend
             - scan-frontend
-            
