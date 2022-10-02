@@ -1,14 +1,15 @@
 version: 2.1
 orbs:
   slack: circleci/slack@4.9.3
-
+         
 commands:
   notify_on_failure:
     steps:
       - slack/notify:
           event: fail
-          channel: testing
+          channel: cicd-pipeline
           template: basic_fail_1
+jobs:
 
   build-frontend:
     docker:
@@ -58,8 +59,8 @@ commands:
           command: |
             cd frontend
             npm install
-            npm run test     
-      - notify_on_failure           
+            npm run test         
+      - notify_on_failure       
   test-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -74,7 +75,6 @@ commands:
             npm install
             npm run test 
       - notify_on_failure
-
   scan-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -123,7 +123,3 @@ workflows:
       - scan-backend:
           requires:
             - build-backend
-  deploy_and_notify:
-      jobs:
-        - deploy:
-            context: slack-secrets
