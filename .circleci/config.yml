@@ -1,7 +1,23 @@
 version: 2.1
 orbs:
   slack: circleci/slack@4.1
-         
+commands:
+
+  destroy-environment:
+    description: Destroy back-end and front-end
+    parameters:
+      Workflow_ID:
+        type: string
+        default: ${CIRCLE_WORKFLOW_ID:0:7}
+    steps:
+        - checkout
+        - run:
+            name: destroy environment 
+            command: |
+              aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.Workflow_ID >>
+              aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.Workflow_ID >>
+              aws s3 rm s3://udapeople-<<parameters.Workflow_ID>>
+
 jobs:
 
   
@@ -122,6 +138,44 @@ jobs:
               ]
             }
 
+  deploy-infrastructure:
+    docker: 
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: yum install
+          command: |
+                yum install -y tar gzip
+      - run:
+          name: Ensure backend infra exists
+          command: |
+                aws cloudformation deploy \
+                --template-file .circleci/files/backend.yml \
+                --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+                --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
+                --tags project=udapeople
+      - run:
+            name: Ensure frontend infra exists
+            command: |
+                  aws cloudformation deploy \
+                  --template-file .circleci/files/frontend.yml \
+                  --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
+                  --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
+                  --tags project=udapeople
+      - run:
+            name: Add IP to ansible inventory 
+            command: |
+              aws cloudformation \
+              list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
+              --no-paginate --output text > ~/inventory.txt
+      - persist_to_workspace:
+          root: ~/
+          paths: 
+            - inventory.txt 
+
+      - destroy_environment
+
 workflows:
   default:
     jobs:
@@ -146,3 +200,4 @@ workflows:
             - test-backend
             - scan-backend
             - scan-frontend
+      - deploy-infrastructure
