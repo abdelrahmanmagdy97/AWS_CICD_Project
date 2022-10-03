@@ -173,8 +173,8 @@ jobs:
           root: ~/
           paths: 
             - inventory.txt 
-
       - destroy_environment
+      
 
 workflows:
   default:
@@ -200,4 +200,6 @@ workflows:
             - test-backend
             - scan-backend
             - scan-frontend
-      - deploy-infrastructure
+      - deploy-infrastructure:
+          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+      
