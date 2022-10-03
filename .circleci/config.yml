@@ -2,7 +2,6 @@ version: 2.1
 orbs:
   slack: circleci/slack@4.1
 commands:
-
   destroy-environment:
     description: Destroy back-end and front-end
     parameters:
@@ -173,7 +172,8 @@ jobs:
           root: ~/
           paths: 
             - inventory.txt 
-      - destroy_environment
+
+      - destroy-environment
       
 
 workflows:
