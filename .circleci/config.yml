@@ -17,6 +17,7 @@ commands:
               aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.Workflow_ID >>
               aws s3 rm s3://udapeople-<<parameters.Workflow_ID>>
             when: on_fail
+
   install_awscli:
     description: Install AWS CLI v2
     steps:
@@ -153,7 +154,6 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - install_awscli
       - run:
           name: yum install
           command: |
@@ -194,9 +194,10 @@ jobs:
     steps:
       - checkout
       # Add ssh keys with fingerprint
+      - install_awscli
       - add_ssh_keys:
                # You can get this ID in the section where you registered the SSH Key
-               fingerprints: ["fc:22:cd:85:f2:ea:c3:9b:e3:29:85:f2:20:3a:0d:8e"] 
+               fingerprints: ["	d7:91:2c:7b:27:37:e3:43:ef:80:27:f5:bd:48:4d:e9"] 
       - run:
            name: Install dependencies
            command: |
