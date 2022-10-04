@@ -176,6 +176,31 @@ jobs:
             - project/.circleci/ansible/inventory.txt
 
       - destroy-environment
+
+  configure-infrastructure:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      # Add ssh keys with fingerprint
+      - add_ssh_keys:
+               # You can get this ID in the section where you registered the SSH Key
+               fingerprints: ["fc:22:cd:85:f2:ea:c3:9b:e3:29:85:f2:20:3a:0d:8e"] 
+      - run:
+           name: Install dependencies
+           command: |
+                 apk add --update ansible
+      - run:
+           name: Configure server
+           command: |
+            cd .circleci/ansible
+            ansible-playbook -i inventory.txt configure-server.yml
+      # attach workspace
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: ~/
+      # Here's where you will add some code to rollback on failure      
+      - destroy-environment
       
 
 workflows:
