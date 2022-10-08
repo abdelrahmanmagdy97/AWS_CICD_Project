@@ -39,7 +39,7 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            SUCCESS=$(curl --insecure  https://kvdb.io/${KVDB_BUCKET}/migration_<< parameters.Workflow_ID >>)
+            SUCCESS=$(curl --insecure  https://kvdb.io/ByGLhKPbmT7XYWEvmwmpoJ/migration_<< parameters.Workflow_ID >>)
             # Logic for reverting the database state
             if (( $SUCCESS == 1 ));
             then
@@ -255,8 +255,8 @@ jobs:
            command: |
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
-            # If you are using kvdb.io, generate the bucket ID "WvGdzdnVv39kB2m9Pv5f6X" in your local terminal first
-            curl --insecure https://kvdb.io/WvGdzdnVv39kB2m9Pv5f6X/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
+            # If you are using kvdb.io, generate the bucket ID "ByGLhKPbmT7XYWEvmwmpoJ" in your local terminal first
+            curl --insecure https://kvdb.io/ByGLhKPbmT7XYWEvmwmpoJ/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
       # Here's where you will add some code to rollback on failure  
         - destroy-environment
