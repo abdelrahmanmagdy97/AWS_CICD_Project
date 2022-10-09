@@ -315,7 +315,7 @@ workflows:
             - test-backend
      # - notify_success:
      #     context: Abdelrahman
-          requires: [deploy-frontend]
+     #     requires: [deploy-frontend]
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
       - configure-infrastructure:
