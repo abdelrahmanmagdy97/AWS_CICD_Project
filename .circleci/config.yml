@@ -256,6 +256,8 @@ jobs:
             then
               # If you are using kvdb.io, generate the bucket ID "X1Q5tMTP2WjhRcih3TkunA" in your local terminal first
               curl --insecure https://kvdb.io/X1Q5tMTP2WjhRcih3TkunA/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
+              curl --insecure https://kvdb.io/X1Q5tMTP2WjhRcih3TkunA/migration_${CIRCLE_WORKFLOW_ID:0:7}
+              echo "test"
             fi
       # Here's where you will add some code to rollback on failure  
         - destroy-environment
@@ -273,7 +275,7 @@ jobs:
             command: |
              sudo apt install ansible -y
              sudo apt install nodejs -y
-             sudo apt install python -y
+             sudo apt install python3.8 -y
         - run:
             name: Get backend url
             command: |
@@ -312,15 +314,11 @@ workflows:
             - test-backend
       - notify_success:
           context: Abdelrahman
-          requires:
-            - test-frontend
-            - test-backend
-            - scan-backend
-            - scan-frontend
+          requires: [deploy-frontend]
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
       - run-migrations:
           requires: [configure-infrastructure]
-      
+      - deploy-frontend
