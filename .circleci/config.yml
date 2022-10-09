@@ -115,6 +115,7 @@ jobs:
             npm install
             npm run test 
 
+
   scan-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -143,7 +144,9 @@ jobs:
             cd backend
             npm install
             npm audit fix --audit-level=critical
- 
+      - save_cache:
+          paths: [backend/node_modules]
+          key: backend-scan
   
   notify_success:
     docker:
@@ -241,7 +244,7 @@ jobs:
         - checkout
         - install_awscli
         - restore_cache:
-            keys: [backend-build]
+            keys: [backend-scan]
         - run:
             name: Run migrations
       # opened inbound for database to be able to run migration
