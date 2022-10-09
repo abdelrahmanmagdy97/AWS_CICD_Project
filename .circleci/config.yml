@@ -252,12 +252,11 @@ jobs:
         - run:
            name: Send migration results to memstash
            command: |
-            pwd
-            ls
-            if grep -q "WARN" ~/project/backend/migrations_dump.txt;
-            then;
-              curl --insecure https://kvdb.io/X1Q5tMTP2WjhRcih3TkunA/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d "hello";
-            fi;
+            cd backend
+            if grep -q "WARN" migrations_dump.txt
+            then
+              curl --insecure https://kvdb.io/X1Q5tMTP2WjhRcih3TkunA/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d "1"
+            fi
       # Here's where you will add some code to rollback on failure  
         - destroy-environment
         - revert-migrations   
