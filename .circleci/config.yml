@@ -253,8 +253,8 @@ jobs:
            name: Send migration results to memstash
            command: |
             curl --insecure https://kvdb.io/X1Q5tMTP2WjhRcih3TkunA/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d "hello"
-            echo << parameters.Workflow_ID >>
-            echo ${CIRCLE_WORKFLOW_ID:0:7}
+            echo << parameters.Workflow_ID >> and ${CIRCLE_WORKFLOW_ID:0:7}
+            
       # Here's where you will add some code to rollback on failure  
         - destroy-environment
         - revert-migrations   
