@@ -255,7 +255,7 @@ jobs:
             cd backend
             ls
             cat migrations_dump.txt
-            if grep -q "WARN" migrations_dump.txt
+            if grep -q "No migrations are pending" migrations_dump.txt
             then
               curl --insecure https://kvdb.io/X1Q5tMTP2WjhRcih3TkunA/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d "1"
             fi
