@@ -252,13 +252,8 @@ jobs:
         - run:
            name: Send migration results to memstash
            command: |
-            if grep -q "WARN" ~/project/backend/migrations_dump.txt
-            then
-              # If you are using kvdb.io, generate the bucket ID "X1Q5tMTP2WjhRcih3TkunA" in your local terminal first
-              curl --insecure https://kvdb.io/X1Q5tMTP2WjhRcih3TkunA/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
-              curl --insecure https://kvdb.io/X1Q5tMTP2WjhRcih3TkunA/migration_${CIRCLE_WORKFLOW_ID:0:7}
-              echo "test"
-            fi
+            curl --insecure https://kvdb.io/X1Q5tMTP2WjhRcih3TkunA/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
+              
       # Here's where you will add some code to rollback on failure  
         - destroy-environment
         - revert-migrations   
@@ -276,6 +271,7 @@ jobs:
              sudo apt install ansible -y
              sudo apt install nodejs -y
              sudo apt install python3.8 -y
+             sudo apt install npm -y
         - run:
             name: Get backend url
             command: |
