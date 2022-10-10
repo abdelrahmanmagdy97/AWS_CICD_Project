@@ -216,7 +216,7 @@ jobs:
       - install_awscli
       - add_ssh_keys:
                # You can get this ID in the section where you registered the SSH Key
-               fingerprints: ["	d7:91:2c:7b:27:37:e3:43:ef:80:27:f5:bd:48:4d:e9"] 
+               fingerprints: ["d7:91:2c:7b:27:37:e3:43:ef:80:27:f5:bd:48:4d:e9"] 
       - run:
            name: Install dependencies
            command: |
@@ -302,10 +302,11 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
+      - install_awscli
       # Add ssh keys with fingerprint
       - add_ssh_keys:
                # You can get this ID in the section where you registered the SSH Key
-               fingerprints: ["	d7:91:2c:7b:27:37:e3:43:ef:80:27:f5:bd:48:4d:e9"] 
+               fingerprints: ["d7:91:2c:7b:27:37:e3:43:ef:80:27:f5:bd:48:4d:e9"] 
       # attach workspace
       - attach_workspace:
           at: ~/
