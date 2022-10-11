@@ -221,15 +221,19 @@ jobs:
            name: Install dependencies
            command: |
                  sudo apt install ansible -y
+      
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: ~/
+          
       - run:
            name: Configure server
            command: |
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
+            cat inventory.txt
       # attach workspace
-      - attach_workspace:
-          # Must be absolute path or relative path from working_directory
-          at: ~/
+      
       # Here's where you will add some code to rollback on failure      
       - destroy-environment
       
