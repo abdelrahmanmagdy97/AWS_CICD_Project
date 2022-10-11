@@ -298,7 +298,7 @@ jobs:
         - revert-migrations
   deploy-backend:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/python:3.10
     steps:
       # Checkout code from git
       - checkout

@@ -21,21 +21,6 @@
       raw: test -e /usr/bin/python3 || (apt -y update && apt install -y python3)
       changed_when: false  
     
-    - name: Install the nodejs
-      apt:
-        name: nodejs
-        state: present
-
-    - name: Install npm
-      apt:
-        name: npm
-        state: present
-    
-    - name: Install pm2
-      apt:
-        name: pm2
-        state: present
-
   environment:
   -  NODE_ENV: production
   -  VERSION: "1"
