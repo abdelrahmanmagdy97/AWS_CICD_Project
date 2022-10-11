@@ -328,10 +328,9 @@ jobs:
               # Archive the contents of the dist folder, along with backned package information
               cd backend
               tar -czf artifact.tar.gz dist/* package*
-              cd ../../../
+              cd ..
               # Copy the files to the deploy role files folder to prepare for deploying it via ansible
-              cd .circleci
-              cp project/backend/artifact.tar.gz .circleci/ansible/roles/deploy/files
+              cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files
       - run:
           name: Deploy backend
           command: |
