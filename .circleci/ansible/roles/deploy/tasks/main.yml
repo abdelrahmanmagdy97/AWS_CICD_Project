@@ -6,7 +6,7 @@
 
 - name: "Unarchive files"
   unarchive:
-    src: artifact.tar.gz
+    src: /home/circleci/project/.circleci/ansible/roles/deploy/tasks/files/artifact.tar.gz
     dest: ~/backend-app
 
 - name: "Install Node"
