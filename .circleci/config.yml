@@ -13,9 +13,9 @@ commands:
         - run:
             name: destroy environment 
             command: |
+              aws s3 rm s3://udapeople-<<parameters.Workflow_ID>>
               aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.Workflow_ID >>
               aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.Workflow_ID >>
-              aws s3 rm s3://udapeople-<<parameters.Workflow_ID>>
             when: on_fail
 
   install_awscli:
@@ -328,11 +328,10 @@ jobs:
               # Archive the contents of the dist folder, along with backned package information
               cd backend
               tar -czf artifact.tar.gz dist/* package*
-              ls
               cd ..
               # Copy the files to the deploy role files folder to prepare for deploying it via ansible
-              cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files
-              ls
+              cp backend/artifact.tar.gz .circleci/ansible/roles/deploy
+              ls .circleci/ansible/roles/deploy
       - run:
           name: Deploy backend
           command: |
