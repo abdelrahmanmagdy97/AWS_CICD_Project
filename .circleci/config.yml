@@ -320,7 +320,9 @@ jobs:
       - run:
           name: Package Backend
           command: |
-            cd backend
+            pwd
+            ls
+            cd project/backend
             npm i
             npm run build
             ls
