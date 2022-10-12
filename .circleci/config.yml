@@ -207,6 +207,7 @@ jobs:
             - project/.circleci/ansible/inventory.txt
 
       - destroy-environment
+      
 
   configure-infrastructure:
     docker:
@@ -468,4 +469,5 @@ workflows:
           requires: [deploy-frontend]
       - smoke-test:
           requires: [deploy-backend]
+          
           
