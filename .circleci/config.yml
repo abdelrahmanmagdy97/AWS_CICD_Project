@@ -422,7 +422,7 @@ jobs:
                         --no-paginate --output text)
                       echo $OLD_WORKFLOW_ID >> ~/oldworkflowid.txt
                       cat ~/oldworkflowid.txt
-                      curl --insecure https://kvdb.io/9dj741CL96Rm5wFpjtdLUa/old_workflow_ids -d "$OLD_WORKFLOW_ID"
+                      curl --insecure https://kvdb.io/9dj741CL96Rm5wFpjtdLUa/old_workflow_id -d "$OLD_WORKFLOW_ID"
       - run:
           name: Update cloudfront distribution
           command: |
@@ -500,4 +500,5 @@ workflows:
       # - smoke-test:
       #     requires: [deploy-backend]
       - cloudfront-update
-      #    requires: [smoke-test]          
+      #    requires: [smoke-test]   
+      - cleanup       
