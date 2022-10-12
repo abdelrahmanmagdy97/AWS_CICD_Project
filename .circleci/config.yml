@@ -357,7 +357,6 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
-      - install_awscli
       - run:
           name: Install dependencies
           command: |
@@ -365,6 +364,7 @@ jobs:
             sudo apt install nodejs -y
             sudo apt install npm -y
             sudo apt install curl -y
+      - install_awscli
       - run:
           name: Get backend url
           command: |
