@@ -40,7 +40,7 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            SUCCESS=$(curl --insecure  https://kvdb.io/2HmTXxtwFhA3RjYJfkMsMK/migration_<< parameters.Workflow_ID >>)
+            SUCCESS=$(curl --insecure  https://kvdb.io/PR6DagVaiDHBSbx4DbHRFe/migration_<< parameters.Workflow_ID >>)
             # Logic for reverting the database state
             if (( $SUCCESS == 1 ));
             then
@@ -275,7 +275,7 @@ jobs:
             cat migrations_dump.txt
             if grep -q "has been executed successfully" migrations_dump.txt
             then
-              curl --insecure https://kvdb.io/2HmTXxtwFhA3RjYJfkMsMK/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d "1"
+              curl --insecure https://kvdb.io/PR6DagVaiDHBSbx4DbHRFe/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d "1"
             fi
       # Here's where you will add some code to rollback on failure  
         - destroy-environment
@@ -433,7 +433,7 @@ jobs:
                         --no-paginate --output text)
                       echo ${OLD_WORKFLOW_ID:10:17} >> ~/oldworkflowid.txt
                       cat ~/oldworkflowid.txt
-                      curl --insecure https://kvdb.io/2HmTXxtwFhA3RjYJfkMsMK/old_workflow_id -d "${OLD_WORKFLOW_ID:10:17}"
+                      curl --insecure https://kvdb.io/PR6DagVaiDHBSbx4DbHRFe/old_workflow_id -d "${OLD_WORKFLOW_ID:10:17}"
       - run:
           name: Update cloudfront distribution
           command: |
@@ -442,7 +442,7 @@ jobs:
               --stack-name "InitialStack" \
               --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
               --tags project=udapeople
-            echo OldWorkflowID: $OLD_WORKFLOW_ID
+            echo OldWorkflowID: ${OLD_WORKFLOW_ID:10:17}
             echo CurrentWorkflowID: ${CIRCLE_WORKFLOW_ID:0:7}
       - destroy-environment
       - revert-migrations 
@@ -460,7 +460,7 @@ jobs:
                   --query "StackSummaries[*].StackName" \
                   --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
                 echo Stack names: "${STACKS[@]}"
-                export OldWorkflowID=$(curl --insecure https://kvdb.io/2HmTXxtwFhA3RjYJfkMsMK/old_workflow_id)
+                export OldWorkflowID=$(curl --insecure https://kvdb.io/PR6DagVaiDHBSbx4DbHRFe/old_workflow_id)
                 echo Old Workflow ID: $OldWorkflowID 
                 if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
                 then
@@ -475,39 +475,39 @@ jobs:
 workflows:
   default:
     jobs:
-      # - build-frontend
-      # - build-backend
-      # - test-frontend:
-      #     requires:
-      #       - build-frontend
-      # - test-backend:
-      #     requires:
-      #       - build-backend
-      # - scan-frontend:
-      #     requires:
-      #       - test-frontend
-      # - scan-backend:
-      #     requires:
-      #       - test-backend
-      # - notify_success:
-      #    context: Abdelrahman
-      #    requires: [smoke-test]
-      # - deploy-infrastructure:
-      #     requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-      #     filters:
-      #       branches:
-      #         only: [master]
-      # - configure-infrastructure:
-      #     requires: [deploy-infrastructure]
-      # - run-migrations:
-      #     requires: [configure-infrastructure]
-      # - deploy-frontend:
-      #     requires: [run-migrations]
-      # - deploy-backend:
-      #     requires: [deploy-frontend]
-      # - smoke-test:
-      #     requires: [deploy-backend]
-      - cloudfront-update
-#         requires: [smoke-test]   
+      - build-frontend
+      - build-backend
+      - test-frontend:
+          requires:
+            - build-frontend
+      - test-backend:
+          requires:
+            - build-backend
+      - scan-frontend:
+          requires:
+            - test-frontend
+      - scan-backend:
+          requires:
+            - test-backend
+      - notify_success:
+         context: Abdelrahman
+         requires: [smoke-test]
+      - deploy-infrastructure:
+          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+          filters:
+            branches:
+              only: [master]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
+      - run-migrations:
+          requires: [configure-infrastructure]
+      - deploy-frontend:
+          requires: [run-migrations]
+      - deploy-backend:
+          requires: [deploy-frontend]
+      - smoke-test:
+          requires: [deploy-backend]
+      - cloudfront-update:
+           requires: [smoke-test]   
       - cleanup:
           requires: [cloudfront-update]
