@@ -353,7 +353,7 @@ jobs:
       - revert-migrations
   smoke-test:
     docker:
-      - image: alpine:latest
+      - image: cimg/base:stable
     steps:
       # Checkout code from git
       - checkout
@@ -392,8 +392,8 @@ jobs:
             else
               return 1
             fi
-    #  - destroy-environment
-    #  - revert-migrations
+      - destroy-environment
+      - revert-migrations
 
 #   cloudfront-update:
 #     docker:
