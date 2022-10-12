@@ -431,9 +431,9 @@ jobs:
                       export OLD_WORKFLOW_ID=$(aws cloudformation \
                         list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
                         --no-paginate --output text)
-                      echo $OLD_WORKFLOW_ID >> ~/oldworkflowid.txt
+                      echo ${OLD_WORKFLOW_ID:10:17} >> ~/oldworkflowid.txt
                       cat ~/oldworkflowid.txt
-                      curl --insecure https://kvdb.io/2HmTXxtwFhA3RjYJfkMsMK/old_workflow_id -d "${CIRCLE_WORKFLOW_ID:10:17}"
+                      curl --insecure https://kvdb.io/2HmTXxtwFhA3RjYJfkMsMK/old_workflow_id -d "${OLD_WORKFLOW_ID:10:17}"
       - run:
           name: Update cloudfront distribution
           command: |
@@ -508,6 +508,6 @@ workflows:
       # - smoke-test:
       #     requires: [deploy-backend]
       - cloudfront-update
-      #   requires: [smoke-test]   
+#         requires: [smoke-test]   
       - cleanup:
           requires: [cloudfront-update]
