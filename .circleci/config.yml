@@ -501,4 +501,4 @@ workflows:
       #     requires: [deploy-backend]
       #- cloudfront-update
       #    requires: [smoke-test]   
-      - cleanup       
+        - cleanup      
