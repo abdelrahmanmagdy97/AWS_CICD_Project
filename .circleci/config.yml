@@ -304,7 +304,7 @@ jobs:
               --output text)
               export API_URL="http://${BACKEND_IP}:3030"
               echo "API_URL = ${API_URL}"
-              echo "API_URL=http://${BACKEND_IP}:3030" >> frontend/.env
+              echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
               cat frontend/.env
         - run:
             name: Deploy frontend objects
@@ -424,7 +424,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            sudo apt install nodejs -y
+            # your code here
       - run:
           name: Save Old Workflow ID to kvdb.io
           command: |
